@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_order_approval_inherit" model="ir.ui.view">
+        <field name="name">sale.order.approval.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Smart Button: always visible, shows count via statinfo -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_approvals"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-check-circle">
+                    <field name="approval_count"
+                           widget="statinfo"
+                           string="Approval"/>
+                </button>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

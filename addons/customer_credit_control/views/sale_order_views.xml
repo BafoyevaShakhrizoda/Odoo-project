@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_order_credit_inherit" model="ir.ui.view">
+        <field name="name">sale.order.credit.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button"
+                        icon="fa-credit-card"
+                        type="action"
+                        name="customer_credit_control.action_customer_credit_limit"
+                        invisible="not partner_id">
+                    <div class="o_stat_info">
+                        <field name="credit_remaining"
+                               widget="monetary"
+                               options="{'currency_field': 'currency_id'}"/>
+                        <span class="o_stat_text">Kredit Qoldiq</span>
+                    </div>
+                </button>
+            </xpath>
+            <!-- Hidden technical fields for modifiers -->
+            <xpath expr="//sheet" position="inside">
+                <field name="credit_warning" invisible="1"/>
+            </xpath>
+
+            <!-- Show credit warning banner before the main form content -->
+            <xpath expr="//sheet" position="before">
+                <div class="alert alert-danger" role="alert"
+                     invisible="not credit_warning">
+                    ⚠️ <strong>Diqqat!</strong> Bu mijozning kredit limiti yetarli emas!
+                    Qolgan kredit: <field name="credit_remaining" readonly="1"/>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

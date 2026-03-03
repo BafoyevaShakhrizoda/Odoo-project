@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ══════════════════════════════════════════ -->
+    <!--  FORM VIEW                                  -->
+    <!-- ══════════════════════════════════════════ -->
+    <record id="view_sale_approval_form" model="ir.ui.view">
+        <field name="name">sale.approval.request.form</field>
+        <field name="model">sale.approval.request</field>
+        <field name="arch" type="xml">
+            <form string="Tasdiqlash So'rovi">
+                <header>
+                    <button name="action_submit" string="Yuborish"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+
+                    <button name="action_approve" string="✅ Tasdiqlash"
+                            type="object" class="btn-success"
+                            invisible="state != 'submitted'"
+                            groups="sales_team.group_sale_manager"/>
+
+                    <button name="action_reject" string="❌ Rad etish"
+                            type="object" class="btn-danger"
+                            invisible="state not in ('submitted',)"
+                            groups="sales_team.group_sale_manager"/>
+
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved,rejected"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Buyurtma Ma'lumotlari">
+                            <field name="sale_order_id" readonly="1"/>
+                            <field name="total_amount" readonly="1"/>
+                            <field name="currency_id" readonly="1"
+                                   groups="base.group_multi_currency"/>
+                        </group>
+                        <group string="Mas'ul Shaxslar">
+                            <field name="requested_by" readonly="1"/>
+                            <field name="approved_by" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Rad etish sababi -->
+                    <group string="Rad Etish Sababi"
+                           invisible="state != 'rejected'">
+                        <field name="reject_reason" nolabel="1"
+                               placeholder="Nima sababdan rad etildi?"/>
+                    </group>
+                </sheet>
+
+                <!-- Chatter (xabarlar tarixi) -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!--  LIST VIEW                                  -->
+    <!-- ══════════════════════════════════════════ -->
+    <record id="view_sale_approval_list" model="ir.ui.view">
+        <field name="name">sale.approval.request.tree</field>
+        <field name="model">sale.approval.request</field>
+        <field name="arch" type="xml">
+            <tree string="Tasdiqlash So'rovlari"
+                  decoration-success="state == 'approved'"
+                  decoration-danger="state == 'rejected'"
+                  decoration-warning="state == 'submitted'"
+                  decoration-muted="state == 'draft'">
+                <field name="name"/>
+                <field name="sale_order_id"/>
+                <field name="total_amount"/>
+                <field name="requested_by"/>
+                <field name="approved_by"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!--  ACTION                                     -->
+    <!-- ══════════════════════════════════════════ -->
+    <record id="action_sale_approval_request" model="ir.actions.act_window">
+        <field name="name">Tasdiqlash So'rovlari</field>
+        <field name="res_model">sale.approval.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════ -->
+    <!--  MENU                                       -->
+    <!-- ══════════════════════════════════════════ -->
+    <menuitem id="menu_sale_approval"
+              name="Tasdiqlash So'rovlari"
+              parent="sale.sale_menu_root"
+              action="action_sale_approval_request"
+              sequence="30"
+              groups="sales_team.group_sale_manager,sales_team.group_sale_salesman"/>
+</odoo>

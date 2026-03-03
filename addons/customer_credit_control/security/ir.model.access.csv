@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_credit_limit_manager,credit.limit.manager,model_customer_credit_limit,account.group_account_manager,1,1,1,1
+access_credit_limit_sales,credit.limit.sales,model_customer_credit_limit,sales_team.group_sale_salesman,1,0,0,0
+access_credit_limit_user,credit.limit.user,model_customer_credit_limit,base.group_user,1,0,0,0
